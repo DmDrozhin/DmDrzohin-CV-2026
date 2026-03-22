@@ -26,9 +26,9 @@
 
 
 
-## 🇬🇧 Project Description
+## Project Description
 
-My Resume 2025 is an online résumé built with Vue 3.5 (Composition API), powered by Vite, styled with Vuetify 3.1, and managed with Pinia.
+My Resume 2026 is an online résumé built with Vue 3.5 (Composition API), powered by Vite, styled with Vuetify 3.1, and managed with Pinia.
 The project features an elegant Swiper Slider that dynamically changes the header background, adding smooth visual transitions.
 
 ✨ Key Features:
