@@ -1,0 +1,43 @@
+@use './fonts.scss' as *;
+/* Global */
+:root {
+  padding: 0;
+  margin: 0;
+  font-family: 'Jost', sans-serif;
+}
+
+/* Print settings */
+@page {
+  size: A4;
+}
+
+/* Base behavior for all elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+ul {
+  padding-inline-start: 24px;
+  margin-block-start: 0.2rem;
+  margin-block-end: 0.2rem;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  height: 100%;
+  width: 100%;
+  font-size: 16px;
+  // scrollbar-gutter: stable both-edges; // this makes unwanted shift of main div block guidelines toward right for the width of scrollbar
+}
+
+body {
+  width: inherit;
+  /* mobile viewport bug fix */
+  height: -webkit-fill-available;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  margin: 0;
+}

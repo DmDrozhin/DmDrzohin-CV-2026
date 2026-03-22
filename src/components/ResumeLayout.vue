@@ -1,0 +1,598 @@
+<script setup>
+import PagePreloader from '@/components/PagePreloader.vue';
+import SidebarSection from '@/components/SidebarSection.vue';
+import BaseSection from '@/components/BaseSection.vue';
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
+import { useDisplay, useTheme } from 'vuetify';
+import { useMainStore } from '@/stores/main.store.js';
+import { createAssetMap } from '@/utils/assets';
+import SwitchersBlock from '@/components/SwitchersBlock.vue';
+import SliderSwiper from '@/components/SliderSwiper.vue';
+import { mdiAccountTie } from '@mdi/js';
+const theme = useTheme();
+const store = useMainStore();
+const display = useDisplay();
+const isLoading = computed(() => store.loading || false);
+const resume = computed(() => store.resume || {});
+const drawer = ref(true); // unfolded by default
+const isSmallAndDown = computed(() => display.smAndDown ?? false);
+const isXSmall = computed(() => display.xs ?? false);
+
+const icons = import.meta.glob('@/assets/images/ui/*', { eager: true });
+const iconsMap = createAssetMap(icons);
+
+const avatarUrl = computed(() => store.currentAvatar || '');
+const contacts = computed(() => resume.value.contacts || []);
+
+const changeLanguage = (lang) => {
+  if (lang === 'ua' || lang === 'en') {
+    store.fetchResume(lang);
+  }
+};
+const changeTheme = (themeName) => {
+  if (themeName === 'light' || themeName === 'dark') {
+    // Change theme in store
+    store.setTheme(themeName);
+    // Change theme in Vuetify
+    theme.change(themeName);
+  }
+};
+// Observing height of header and calculating height of sidebar
+const resumeHeader = ref(null);
+const headerHeight = ref(null);
+const headerHeightMob = ref(null);
+const observer = new ResizeObserver((entries) => {
+  if (entries.length) {
+    const { top, height } = entries[0].contentRect;
+    headerHeight.value = height;
+    headerHeightMob.value = top + height;
+  }
+});
+onMounted(() => observer.observe(resumeHeader.value));
+// Stop observing the header
+onBeforeUnmount(() => {
+  if (resumeHeader.value) {
+    observer.unobserve(resumeHeader.value);
+  }
+});
+const lang = computed(() => store.language || 'ua');
+const translations = {
+  ua: {
+    summary: 'про себе',
+    experience: 'досвід роботи',
+    education: 'освіта',
+    skills: 'навички',
+    certificates: 'сертифікати',
+    languages: 'мови'
+  },
+  en: {
+    summary: 'summary',
+    experience: 'work experience',
+    education: 'education',
+    skills: 'skills',
+    certificates: 'certificates',
+    languages: 'languages'
+  }
+};
+const groupedSections = computed(() => {
+  if (!resume.value) {
+    return { main: [], extra: [] };
+  }
+  const t = translations[lang.value];
+  return {
+    // Left fide
+    main: [
+      { key: t.summary, value: resume.value.summary || [], id: 'summary' },
+      {
+        key: t.experience,
+        value: resume.value.experience || [],
+        id: 'experience'
+      },
+      { key: t.education, value: resume.value.education || [], id: 'education' }
+    ],
+    // Sidebar
+    extra: [
+      { key: t.skills, value: resume.value.skills || [], id: 'skills' },
+      {
+        key: t.certificates,
+        value: resume.value.certificates || [],
+        id: 'certificates'
+      },
+      { key: t.languages, value: resume.value.languages || [], id: 'languages' }
+    ]
+  };
+});
+const activeSlide = ref(0);
+const darkSlidesMap = ref([1]);
+// If slide is dark, we can style it specifically
+const isSlideDark = computed(
+  () => darkSlidesMap.value.indexOf(activeSlide.value) !== -1
+);
+// Importing all background images from folder
+const headerBackground = import.meta.glob('@/assets/images/background/*', {
+  eager: true
+});
+const urlMap = Object.values(createAssetMap(headerBackground));
+
+// Initiating GET data request
+onBeforeMount(() => store.fetchResume());
+</script>
+<template>
+  <div class="my-resume">
+    <PagePreloader v-if="isLoading" />
+    <v-btn
+      v-if="!drawer"
+      class="my-resume__button show-skills"
+      variant="flat"
+      color="#77A608"
+      size="x-small"
+      position="sticky"
+      aria-label="open skills"
+      @click="drawer = !drawer"
+      >skills</v-btn
+    >
+    <v-app-bar class="my-resume__header" absolute height="auto">
+      <div ref="resumeHeader" class="user__wrapper">
+        <div class="user__adaptive-row" :class="{ 'light-text': isSlideDark }">
+          <div class="user__titles">
+            <template v-if="urlMap.length">
+              <SliderSwiper
+                class="user__swiper"
+                :options="{ arr: urlMap, isDark: isSlideDark }"
+                @change-slide="($event) => (activeSlide = $event)"
+              />
+            </template>
+            <SwitchersBlock
+              class="user__switcher"
+              @change-lang="changeLanguage"
+              @change-theme="changeTheme"
+            />
+            <div class="user__description person">
+              <div class="person__name">{{ resume.name }}</div>
+              <div class="person__title">{{ resume.title }}</div>
+              <div class="person__location">{{ resume.location }}</div>
+            </div>
+          </div>
+          <div class="user__photo-wrapper">
+            <v-img
+              v-if="avatarUrl"
+              class="user__photo"
+              :src="avatarUrl"
+              height="150"
+              width="150"
+              alt="candidate photo"
+            />
+            <v-icon v-else size="150" color="#969595" :icon="mdiAccountTie" />
+          </div>
+        </div>
+        <div v-if="contacts.length" class="user__meta-data">
+          <v-btn
+            v-for="contact in contacts"
+            :key="contact.item"
+            :href="contact.link"
+            target="_blank"
+            rel="noopener"
+            tag="a"
+            variant="text"
+            size="small"
+            aria-label="open contact"
+            class="user__button meta-item"
+          >
+            <v-img
+              :src="contact.icon"
+              :height="contact.size"
+              :width="contact.size"
+              alt="contacts icon"
+            />
+            <span class="user__button-txt">{{ contact.item }}</span>
+          </v-btn>
+          <v-tooltip
+            :text="drawer ? 'Close skills' : 'Open skills'"
+            location="top"
+            max-height="24"
+          >
+            <template #activator="{ props }">
+              <v-btn
+                v-if="isSmallAndDown.value"
+                v-bind="props"
+                class="user__button skills animated-button"
+                icon
+                :size="isXSmall.value ? 'large' : 'x-small'"
+                :class="{ small: isXSmall }"
+                aria-label="open skills"
+                @click="drawer = !drawer"
+              >
+                <v-img
+                  :width="isXSmall.value ? 48 : 32"
+                  class="animated-button__icon"
+                  :class="{ open: drawer }"
+                  :src="iconsMap['arrow-bold-left.svg']"
+                  alt="open skills icon"
+                />
+              </v-btn>
+            </template>
+          </v-tooltip>
+        </div>
+        <div class="user__gradient"></div>
+      </div>
+    </v-app-bar>
+    <!-- SIDEBAR -->
+    <v-navigation-drawer
+      v-model="drawer"
+      class="my-resume__sidebar"
+      location="right"
+      :permanent="!isSmallAndDown.value"
+      :mobile="isSmallAndDown.value"
+      color="grey-lighten-4"
+      absolute
+      width="224"
+    >
+      <SidebarSection
+        v-for="(section, idx) in groupedSections.extra"
+        :key="idx"
+        :options="{ ...section, darken: true }"
+      />
+    </v-navigation-drawer>
+    <!-- MAIN -->
+    <v-main class="my-resume__main">
+      <v-container class="my-resume__container">
+        <BaseSection
+          v-for="(section, idx) in groupedSections.main"
+          :key="idx"
+          :options="{ ...section, darken: false }"
+        />
+      </v-container>
+    </v-main>
+  </div>
+</template>
+<style lang="scss" scoped>
+@use 'vuetify/settings' as *;
+@use 'sass:color';
+.my-resume {
+  width: 100%;
+  max-width: 794px;
+  min-width: 320px;
+  height: fit-content;
+  min-height: 1123px;
+  position: relative;
+  margin: 24px auto;
+  overflow: hidden;
+  background-color: rgba(var(--v-theme-background-page));
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.15);
+  @include media-down(sm-down) {
+    margin: 0 auto;
+    box-shadow: none;
+    min-height: 100vh;
+  }
+  &__header {
+    overflow: visible !important;
+  }
+  &__sidebar {
+    top: v-bind('headerHeight + 12 + "px"');
+    height: auto;
+    border-radius: 24px 0 0 0;
+    @include media-down(xs) {
+      height: fit-content;
+      top: v-bind('headerHeightMob + 12 + "px"');
+    }
+  }
+  &__main {
+    padding-top: v-bind('headerHeight + "px"');
+    @include media-down(xs) {
+      padding-top: v-bind('headerHeightMob + "px"');
+    }
+  }
+  &__container {
+    min-height: 940px;
+    position: relative;
+    padding: 16px;
+  }
+  &__button.show-skills {
+    position: fixed;
+    left: auto;
+    right: -34px;
+    top: 50vh;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    border-radius: 6px 6px 0 0;
+    padding: 0 2px 0 8px;
+    z-index: 100;
+    display: none;
+    @include media-down(xs) {
+      display: inline-block;
+    }
+  }
+}
+.user {
+  &__wrapper {
+    width: 100%;
+  }
+  &__adaptive-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'titles photo';
+    transition: all 0.3s ease-in;
+    background-color: rgb(var(--v-theme-background-header));
+    &.light-text {
+      background-color: rgb(var(--v-theme-background-meta));
+    }
+    &.light-text * {
+      color: $light;
+    }
+    @include media-down(xxs) {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'photo'
+        'titles';
+      justify-items: center;
+      padding: 40px 12px 0;
+    }
+  }
+  &__titles {
+    grid-area: titles;
+    position: relative;
+    padding: 24px 32px;
+    text-align: center;
+    @include Prevent-select;
+    @include media-down(xxs) {
+      position: static;
+    }
+  }
+  &__swiper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    height: -webkit-fill-available;
+    z-index: 0;
+  }
+  &__description {
+    text-align: left;
+    @include media-down(xxs) {
+      text-align: center;
+    }
+    .person {
+      &__name {
+        font-size: 2rem;
+        letter-spacing: 2.7px;
+        margin-bottom: 8px;
+      }
+      &__title {
+        font-size: 1.4rem;
+      }
+      // &__location {
+      // }
+    }
+  }
+
+  &__photo-wrapper {
+    align-content: end;
+  }
+  &__photo {
+    grid-area: photo;
+    border-radius: 16px 0 0 0 !important;
+    margin-top: auto;
+    @include media-down(xs) {
+      margin-inline: auto;
+    }
+  }
+  &__switcher {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    z-index: 10;
+    &.light-text * {
+      color: $light;
+    }
+  }
+  &__meta-data {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: rgb(var(--v-theme-background-meta));
+    @include media-down(sm-down) {
+      padding-right: 80px;
+    }
+    @include media-down(xs) {
+      flex-direction: column;
+      row-gap: 8px;
+      padding: 12px 80px;
+    }
+    @media screen and (max-width: 380px) {
+      padding: 12px 12px 56px 12px;
+    }
+  }
+  &__button.meta-item {
+    flex: 1 0 auto;
+    border-radius: 0 !important;
+    padding: 0 8px !important;
+    @include media-down(xs) {
+      width: 100%;
+      max-width: 200px;
+      flex-shrink: 1;
+    }
+  }
+  &__button.skills {
+    flex-shrink: 0;
+    position: absolute;
+    margin: 0 8px;
+    right: 16px;
+    z-index: 2;
+    transition: all 0.3s ease-in;
+    @include media-down(xs) {
+      top: unset !important;
+      bottom: 1rem;
+      margin: 0;
+    }
+  }
+  &__button.meta-item:hover::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    height: 1px;
+    width: 100%;
+    background-color: $green-md;
+  }
+  &__button-txt {
+    font-size: 0.75rem;
+    font-weight: 500;
+    max-width: 150px;
+    color: $white;
+    line-height: 1;
+    @include Txt-ellipsis;
+  }
+  &__gradient {
+    position: relative;
+    grid-area: gradient;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(
+      90deg,
+      rgb(var(--v-theme-background-gradient-start)) 0%,
+      rgb(var(--v-theme-background-gradient-middle)) 50%,
+      rgb(var(--v-theme-background-gradient-end)) 100%
+    );
+  }
+  &__gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 28%;
+    width: 100px;
+    height: 50px;
+    background: radial-gradient(
+      circle at 50% 0,
+      rgba(var(--v-theme-background-header), 0.5) calc(25px - 1px),
+      transparent 25px
+    );
+    pointer-events: none;
+    @include media-down(sm-down) {
+      display: none;
+    }
+  }
+}
+.animated-button {
+  position: relative;
+  &::before {
+    content: '•';
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: $green-md;
+    animation: circular-move 8s linear infinite;
+    z-index: 100;
+    @include media-down(xs) {
+      top: 19px;
+    }
+  }
+  &__icon {
+    transition: transform 0.3s linear;
+    border-radius: 50%;
+    outline: 6px solid rgb(var(--v-theme-background-skills-button));
+    &.open {
+      transform: rotate(-180deg);
+    }
+    // &::before {
+    //   content: '';
+    //   position: absolute;
+    //   $offset: 3px;
+    //   top: -$offset;
+    //   left: -$offset;
+    //   width: calc(100% + $offset * 2);
+    //   height: calc(100% + $offset * 2);
+    //   border-radius: 50%;
+    //   background-color: rgb(var(--v-theme-background-skills-button));
+    //   z-index: -1;
+    // }
+  }
+  @keyframes circular-move {
+    0% {
+      transform: rotate(0deg) translateX(32px) rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg) translateX(32px) rotate(-360deg);
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+.my-resume {
+  .v-toolbar {
+    &__content {
+      overflow: visible;
+    }
+  }
+  &__sidebar {
+    .section {
+      &__wrapper.skills {
+        flex: 1;
+        .section.skills {
+          .main-skill::before {
+            animation: pulse-shadow 1.3s ease-in-out forwards;
+            animation-delay: 1.5s;
+          }
+        }
+      }
+    }
+  }
+  .v-navigation-drawer {
+    &__content {
+      display: flex;
+      flex-direction: column;
+      border-radius: inherit;
+      padding: 12px;
+      @include Scrollbar;
+    }
+  }
+  &__button.show-skills {
+    .v-btn {
+      &__content {
+        line-height: 1;
+        letter-spacing: 0.5rem;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+.user {
+  &__meta-data {
+    .v-btn {
+      --v-hover-opacity: 0.85;
+      &__overlay {
+        background: rgba(#000, 0.15) !important;
+      }
+      &__content {
+        gap: 8px;
+      }
+    }
+  }
+}
+@keyframes pulse-shadow {
+  0% {
+    box-shadow: 0 0 0 0 $green-md;
+  }
+  50% {
+    box-shadow: 0 0 3px 6px $green-md;
+  }
+  100% {
+    box-shadow: 0 0 0 0 $green-md;
+  }
+}
+.v-overlay-container {
+  .v-overlay {
+    &__content {
+      max-height: fit-content !important;
+      padding: 2px 8px !important;
+      outline: 1px solid $green-md;
+      font-size: 0.8rem !important;
+    }
+  }
+}
+</style>
