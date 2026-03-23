@@ -1,5 +1,7 @@
 <!-- eslint-disable vue/no-v-html -->
 <script setup>
+import TitleBlock from '@/components/TitleBlock.vue';
+
 defineProps({
   options: {
     type: Object,
@@ -10,13 +12,20 @@ defineProps({
 </script>
 
 <template>
-  <ul class="summary">
+  <TitleBlock
+    v-if="options.title"
+    :symbol="options.symbol"
+    :title="options.title"
+    :darken="false"
+  />
+  <ul v-if="options.description?.length" class="summary">
     <li
-      v-for="(entry, idx) in options.value"
+      v-for="(entry, idx) in options.description"
       :key="idx"
       class="summary__entry"
-      v-html="entry"
-    />
+    >
+      {{ entry }}
+    </li>
   </ul>
 </template>
 
@@ -32,10 +41,8 @@ defineProps({
     color: $green-md;
     font-size: 1rem;
     position: absolute;
-    top:  -0.12rem;
+    top: -0.12rem;
     left: -1rem;
   }
 }
 </style>
-
-<style lang="scss"></style>

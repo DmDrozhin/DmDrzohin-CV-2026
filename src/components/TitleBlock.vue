@@ -1,22 +1,26 @@
 <script setup>
-import { computed, ref } from 'vue';
-const props = defineProps({
-  options: {
-    type: Object,
-    default: () => {}
+defineProps({
+  symbol: {
+    type: String,
+    default: 'T'
+  },
+  title: {
+    type: String,
+    default: 'Title'
+  },
+  darken: {
+    type: Boolean,
+    default: false
   }
 });
-const firstLetter = computed(
-  () => props.options.text?.charAt(0).toUpperCase() || ''
-);
 </script>
 <template>
   <div class="title-block">
-    <div class="title-block__capitalized" :class="{ darken: options.darken }">
-      {{ firstLetter }}
+    <div class="title-block__capitalized" :class="{ darken: darken }">
+      {{ symbol }}
     </div>
     <div class="title-block__name">
-      {{ options.text || '' }}
+      {{ title }}
     </div>
   </div>
 </template>
