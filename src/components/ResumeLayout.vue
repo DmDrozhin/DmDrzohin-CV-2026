@@ -1,42 +1,46 @@
+smAndDown
 <script setup>
-import PagePreloader from '@/components/PagePreloader.vue';
-import SidebarSection from '@/components/SidebarSection.vue';
-import BaseSection from '@/components/BaseSection.vue';
-import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
-import { useDisplay, useTheme } from 'vuetify';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+
+import { useDisplay } from 'vuetify';
+const { smAndDown, xs } = { ...useDisplay() };
+
 import { useMainStore } from '@/stores/main.store.js';
+const store = useMainStore();
+
+import { mdiAccountTie } from '@mdi/js';
 import { createAssetMap } from '@/utils/assets';
+
+import PagePreloader from '@/components/PagePreloader.vue';
 import SwitchersBlock from '@/components/SwitchersBlock.vue';
 import SliderSwiper from '@/components/SliderSwiper.vue';
-import { mdiAccountTie } from '@mdi/js';
-const theme = useTheme();
-const store = useMainStore();
-const display = useDisplay();
+
+import SectionSummary from '@/components/SectionSummary.vue';
+import SectionExperience from '@/components/SectionExperience.vue';
+import SectionProjects from '@/components/SectionProjects.vue';
+import SectionSkills from '@/components/SectionSkills.vue';
+import SectionEducation from '@/components/SectionEducation.vue';
+import SectionLanguages from '@/components/SectionLanguages.vue';
+
+import { useResume } from '@/composables/useResume';
+const lang = computed(() => store.currentLang);
+const { resume } = useResume(lang);
+
 const isLoading = computed(() => store.loading || false);
-const resume = computed(() => store.resume || {});
-const drawer = ref(true); // unfolded by default
-const isSmallAndDown = computed(() => display.smAndDown ?? false);
-const isXSmall = computed(() => display.xs ?? false);
+
+const drawer = ref(true);
 
 const icons = import.meta.glob('@/assets/images/ui/*', { eager: true });
 const iconsMap = createAssetMap(icons);
 
-const avatarUrl = computed(() => store.currentAvatar || '');
+const avatar = computed(() =>
+  store.currentTheme === 'light'
+    ? resume.value.avatar_light
+    : resume.value.avatar_dark
+);
+
 const contacts = computed(() => resume.value.contacts || []);
 
-const changeLanguage = (lang) => {
-  if (lang === 'ua' || lang === 'en') {
-    store.fetchResume(lang);
-  }
-};
-const changeTheme = (themeName) => {
-  if (themeName === 'light' || themeName === 'dark') {
-    // Change theme in store
-    store.setTheme(themeName);
-    // Change theme in Vuetify
-    theme.change(themeName);
-  }
-};
 // Observing height of header and calculating height of sidebar
 const resumeHeader = ref(null);
 const headerHeight = ref(null);
@@ -55,53 +59,7 @@ onBeforeUnmount(() => {
     observer.unobserve(resumeHeader.value);
   }
 });
-const lang = computed(() => store.language || 'ua');
-const translations = {
-  ua: {
-    summary: 'про себе',
-    experience: 'досвід роботи',
-    education: 'освіта',
-    skills: 'навички',
-    certificates: 'сертифікати',
-    languages: 'мови'
-  },
-  en: {
-    summary: 'summary',
-    experience: 'work experience',
-    education: 'education',
-    skills: 'skills',
-    certificates: 'certificates',
-    languages: 'languages'
-  }
-};
-const groupedSections = computed(() => {
-  if (!resume.value) {
-    return { main: [], extra: [] };
-  }
-  const t = translations[lang.value];
-  return {
-    // Left fide
-    main: [
-      { key: t.summary, value: resume.value.summary || [], id: 'summary' },
-      {
-        key: t.experience,
-        value: resume.value.experience || [],
-        id: 'experience'
-      },
-      { key: t.education, value: resume.value.education || [], id: 'education' }
-    ],
-    // Sidebar
-    extra: [
-      { key: t.skills, value: resume.value.skills || [], id: 'skills' },
-      {
-        key: t.certificates,
-        value: resume.value.certificates || [],
-        id: 'certificates'
-      },
-      { key: t.languages, value: resume.value.languages || [], id: 'languages' }
-    ]
-  };
-});
+
 const activeSlide = ref(0);
 const darkSlidesMap = ref([1]);
 // If slide is dark, we can style it specifically
@@ -114,8 +72,6 @@ const headerBackground = import.meta.glob('@/assets/images/background/*', {
 });
 const urlMap = Object.values(createAssetMap(headerBackground));
 
-// Initiating GET data request
-onBeforeMount(() => store.fetchResume());
 </script>
 <template>
   <div class="my-resume">
@@ -142,11 +98,7 @@ onBeforeMount(() => store.fetchResume());
                 @change-slide="($event) => (activeSlide = $event)"
               />
             </template>
-            <SwitchersBlock
-              class="user__switcher"
-              @change-lang="changeLanguage"
-              @change-theme="changeTheme"
-            />
+            <SwitchersBlock class="user__switcher" />
             <div class="user__description person">
               <div class="person__name">{{ resume.name }}</div>
               <div class="person__title">{{ resume.title }}</div>
@@ -155,9 +107,9 @@ onBeforeMount(() => store.fetchResume());
           </div>
           <div class="user__photo-wrapper">
             <v-img
-              v-if="avatarUrl"
+              v-if="avatar"
+              :src="avatar"
               class="user__photo"
-              :src="avatarUrl"
               height="150"
               width="150"
               alt="candidate photo"
@@ -193,17 +145,17 @@ onBeforeMount(() => store.fetchResume());
           >
             <template #activator="{ props }">
               <v-btn
-                v-if="isSmallAndDown.value"
+                v-if="smAndDown.value"
                 v-bind="props"
                 class="user__button skills animated-button"
                 icon
-                :size="isXSmall.value ? 'large' : 'x-small'"
-                :class="{ small: isXSmall }"
+                :size="xs.value ? 'large' : 'x-small'"
+                :class="{ small: xs }"
                 aria-label="open skills"
                 @click="drawer = !drawer"
               >
                 <v-img
-                  :width="isXSmall.value ? 48 : 32"
+                  :width="xs.value ? 48 : 32"
                   class="animated-button__icon"
                   :class="{ open: drawer }"
                   :src="iconsMap['arrow-bold-left.svg']"
@@ -221,25 +173,24 @@ onBeforeMount(() => store.fetchResume());
       v-model="drawer"
       class="my-resume__sidebar"
       location="right"
-      :permanent="!isSmallAndDown.value"
-      :mobile="isSmallAndDown.value"
+      :permanent="!smAndDown.value"
+      :mobile="smAndDown.value"
       color="grey-lighten-4"
       absolute
       width="224"
     >
-      <SidebarSection
-        v-for="(section, idx) in groupedSections.extra"
-        :key="idx"
-        :options="{ ...section, darken: true }"
-      />
+      <SectionSkills :options="resume.skills" />
+      <SectionEducation :options="resume.education" />
+      <SectionLanguages :options="resume.languages" />
     </v-navigation-drawer>
     <!-- MAIN -->
     <v-main class="my-resume__main">
       <v-container class="my-resume__container">
-        <BaseSection
-          v-for="(section, idx) in groupedSections.main"
-          :key="idx"
-          :options="{ ...section, darken: false }"
+        <SectionSummary v-if="resume.summary" :options="resume.summary" />
+        <SectionProjects v-if="resume.projects" :options="resume.projects" />
+        <SectionExperience
+          v-if="resume.experience"
+          :options="resume.experience"
         />
       </v-container>
     </v-main>
@@ -498,18 +449,6 @@ onBeforeMount(() => store.fetchResume());
     &.open {
       transform: rotate(-180deg);
     }
-    // &::before {
-    //   content: '';
-    //   position: absolute;
-    //   $offset: 3px;
-    //   top: -$offset;
-    //   left: -$offset;
-    //   width: calc(100% + $offset * 2);
-    //   height: calc(100% + $offset * 2);
-    //   border-radius: 50%;
-    //   background-color: rgb(var(--v-theme-background-skills-button));
-    //   z-index: -1;
-    // }
   }
   @keyframes circular-move {
     0% {
@@ -546,8 +485,9 @@ onBeforeMount(() => store.fetchResume());
     &__content {
       display: flex;
       flex-direction: column;
-      border-radius: inherit;
+      justify-content: space-between;
       padding: 12px;
+      border-radius: inherit;
       @include Scrollbar;
     }
   }
