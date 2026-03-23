@@ -1,0 +1,306 @@
+{
+  "name": "Дмитро Дрожжин",
+  "title": "Frontend Розробник (Vue.js)",
+  "location": "м. Вишневе, Київська область",
+  "avatar_light": "avatarLightTheme.jpeg",
+  "avatar_dark": "avatarDarkTheme.jpeg",
+  "contacts": [
+    {
+      "item": "ddrozhin@gmail.com",
+      "link": "mailto:ddrozhin@gmail.com",
+      "icon": "gmail.svg",
+      "size": 20
+    },
+    {
+      "item": "github.com/DmDrozhin",
+      "link": "https://github.com/DmDrozhin",
+      "icon": "github.svg",
+      "size": 20
+    },
+    {
+      "item": "@DmDrozhin",
+      "link": "https://t.me/DmDrozhin",
+      "icon": "telegram.svg",
+      "size": 20
+    },
+    {
+      "item": "+38 (095) 285-64-34",
+      "link": "tel:+380952856434",
+      "icon": "phone.svg",
+      "size": 22
+    }
+  ],
+  "summary": {
+    "id": "summary",
+    "symbol": "П",
+    "title": "ПРО СЕБЕ",
+    "description": [
+      "Результат-орієнтований Frontend Developer (Vue.js) з понад 3 роками комерційного досвіду розробки масштабованих та високопродуктивних веб-застосунків. Спеціалізуюсь на екосистемі Vue 2/3 (Composition API, Pinia, Vuetify) з акцентом на чисту архітектуру, SEO-оптимізацію та підвищення продуктивності (Lighthouse). Маю досвід самостійного проєктування та реалізації функціоналу, оптимізації існуючого коду та створення масштабованих і підтримуваних рішень."
+    ]
+  },
+  "projects": {
+    "id": "projects",
+    "symbol": "П",
+    "title": "ПРОЕКТИ",
+    "description": [
+      {
+        "name": "Стоматологія «Дент-Лайф»",
+        "link": "https://dent-life.kiev.ua",
+        "icon": "logo-green.svg",
+        "achievements": [
+          "Розробив SEO-оптимізований сайт на Vue 3 + Vite SSG",
+          "Реалізував мультимовність (UA / EN / RU)",
+          "Створив 6 сторінок послуг зі структурованим SEO-контентом",
+          "Інтегрував schema.org (JSON-LD), Google Maps API, Google Reviews",
+          "Реалізував динамічні ціни через Google Sheets з кешуванням",
+          "Оптимізував продуктивність та швидкість завантаження"
+        ]
+      },
+      {
+        "name": "Rock Paper Scissors (Marketing Agency startup)»",
+        "link": "https://therockpaperscissors.com",
+        "icon": "RPS_logo.svg",
+        "achievements": [
+          "Розробив SPA на Vue 3 (Composition API) + Vite",
+          "Реалізував форми збору лідів з валідацією та відправкою (Formspree)",
+          "Додав багаторівневий захист від ботів (honeypot, reCAPTCHA)",
+          "Організував глобальний стан через Pinia",
+          "Створив повторно використовувані UI-компоненти"
+        ]
+      }
+    ]
+  },
+  "experience": {
+    "id": "experience",
+    "symbol": "Д",
+    "title": "ДОСВІД РОБОТИ",
+    "description": [
+      {
+        "id": "talentfly",
+        "position": "Frontend Розробник (Vue.js)",
+        "company": "TalentFly",
+        "company_icon": "talentfly.svg",
+        "company_icon_size": 18,
+        "link": "https://talentfly.com",
+        "period": "02/2024 - 09/2025",
+        "achievements": [
+          "Розробляв та підтримував компоненти на Vue 2/3 (Composition та Options API)",
+          "Створював повторно використовувані компоненти",
+          "Реалізовував адаптивний pixel-perfect UI за макетами Figma",
+          "Налаштовував компоненти Vuetify відповідно до дизайн-системи",
+          "Інтегрував Swiper Element",
+          "Виконував кросбраузерне тестування (BrowserStack) та виправляв UI/UX проблеми",
+          "Підвищував підтримуваність коду через рефакторинг"
+        ]
+      },
+      {
+        "id": "okdveri",
+        "position": "Веб / E-commerce Розробник",
+        "company": "OkDveri",
+        "company_icon": "okdveri.svg",
+        "company_icon_size": 22,
+        "link": "https://www.okdveri.com.ua",
+        "period": "02/2019 - 10/2023",
+        "achievements": [
+          "Розробляв та підтримував інтернет-магазин (WooCommerce + Elementor)",
+          "Створив Vue-додаток для автоматизації завантаження товарів",
+          "Покращив структуру сторінок та SEO",
+          "Оптимізував UI/UX сторінок товарів",
+          "Адміністрував хостинг, домен та Google Business",
+          "Створював маркетингові матеріали та візуальний контент"
+        ]
+      },
+      {
+        "id": "nch",
+        "position": "Системний адміністратор / Фахівець з операцій з цінними паперами",
+        "company": "NCH Advisors Inc. (представництво в Україні)",
+        "company_icon": "",
+        "company_icon_size": "",
+        "link": "https://nchcapital.com/",
+        "period": "01/1996 - 10/2017",
+        "achievements": [
+          "Підтримка IT-інфраструктури, мереж та систем",
+          "Робота з фінансовими даними та міжнародними операціями"
+        ]
+      }
+    ]
+  },
+  "education": {
+    "id": "education",
+    "symbol": "О",
+    "title": "ОСВІТА",
+    "description": [
+      {
+        "institution": "Економічний інститут менеджменту, Київ",
+        "degree": "Спеціаліст з менеджменту"
+      }
+    ]
+  },
+  "skills": {
+    "id": "skills",
+    "symbol": "Н",
+    "title": "НАВИЧКИ",
+    "description": [
+      {
+        "id": 101,
+        "type": 1,
+        "skill": "JavaScript",
+        "img": "js.svg",
+        "img_size": 24
+      },
+      {
+        "id": 102,
+        "type": 2,
+        "skill": [
+          { "item": "Vue", "img": "vue.svg", "img_size": 28 },
+          { "item": "Vuex", "img": "divider.svg", "img_size": 4 },
+          { "item": "VueRouter", "img": "divider.svg", "img_size": 4 }
+        ]
+      },
+      {
+        "id": 103,
+        "type": 1,
+        "skill": "Composition | Options API",
+        "img": "",
+        "img_size": 20
+      },
+      {
+        "id": 104,
+        "type": 1,
+        "skill": "Pinia",
+        "img": "pinia.svg",
+        "img_size": 20
+      },
+      {
+        "id": 105,
+        "type": 1,
+        "skill": "Vuetify",
+        "img": "vuetify.svg",
+        "img_size": 24
+      },
+      {
+        "id": 106,
+        "type": 2,
+        "skill": [
+          { "item": "HTML", "img": "html.svg", "img_size": 20 },
+          { "item": "CSS", "img": "css.svg", "img_size": 20 },
+          { "item": "SCSS", "img": "sass.svg", "img_size": 24 }
+        ]
+      },
+      {
+        "id": 107,
+        "type": 1,
+        "skill": "Swiper Element",
+        "img": "swiper.svg",
+        "img_size": 20
+      },
+      {
+        "id": 108,
+        "type": 1,
+        "skill": "Webpack",
+        "img": "webpack.svg",
+        "img_size": 20
+      },
+      {
+        "id": 109,
+        "type": 1,
+        "skill": "Vite",
+        "img": "vite.svg",
+        "img_size": 20
+      },
+      {
+        "id": 110,
+        "type": 1,
+        "skill": "Vite SSG",
+        "img": "",
+        "img_size": 20
+      },
+      {
+        "id": 111,
+        "type": 1,
+        "skill": "Figma",
+        "img": "figma.svg",
+        "img_size": 16
+      },
+      {
+        "id": 112,
+        "type": 1,
+        "skill": "Node.js",
+        "img": "node.svg",
+        "img_size": 32
+      },
+      {
+        "id": 113,
+        "type": 1,
+        "skill": "TypeScript",
+        "img": "ts.png",
+        "img_size": 24
+      },
+      {
+        "id": 114,
+        "type": 1,
+        "skill": "Git",
+        "img": "git.svg",
+        "img_size": 20
+      },
+      {
+        "id": 115,
+        "type": 1,
+        "skill": "CorelDRAW",
+        "img": "coreldraw.svg",
+        "img_size": 16
+      },
+      {
+        "id": 116,
+        "type": 1,
+        "skill": "REST API",
+        "img": "",
+        "img_size": 20
+      },
+      {
+        "id": 117,
+        "type": 1,
+        "skill": "Lighthouse",
+        "img": "lighthouse.png",
+        "img_size": 24
+      },
+      {
+        "id": 118,
+        "type": 1,
+        "skill": "SEO/Performance оптимізація",
+        "img": "",
+        "img_size": 24
+      },
+      {
+        "id": 119,
+        "type": 1,
+        "skill": "PerfectPixel",
+        "img": "perfectpixel.svg",
+        "img_size": 20
+      },
+      {
+        "id": 120,
+        "type": 1,
+        "skill": "Адаптивна верстка",
+        "img": "",
+        "img_size": 20
+      },
+      {
+        "id": 121,
+        "type": 1,
+        "skill": "BrowserStack тестування",
+        "img": "browserstack.svg",
+        "img_size": 20
+      }
+    ]
+  },
+  "languages": {
+    "id": "languages",
+    "symbol": "М",
+    "title": "МОВИ",
+    "description": [
+      { "language": "Англійська", "level": "Intermediate" },
+      { "language": "Українська | Російська", "level": "" }
+    ]
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "name": "Dmytro Drozhzhyn",
+  "title": "Frontend Developer (Vue.js)",
+  "location": "Location: Vyshneve, Kyiv Oblast, UA",
+  "avatar_light": "avatarLightTheme.jpeg",
+  "avatar_dark": "avatarDarkTheme.jpeg",
+  "contacts": [
+    {
+      "item": "ddrozhin@gmail.com",
+      "link": "mailto:ddrozhin@gmail.com",
+      "icon": "gmail.svg",
+      "size": 24
+    },
+    {
+      "item": "github.com/DmDrozhin",
+      "link": "https://github.com/DmDrozhin",
+      "icon": "github.svg",
+      "size": 24
+    },
+    {
+      "item": "@DmDrozhin",
+      "link": "https://t.me/DmDrozhin",
+      "icon": "telegram.svg",
+      "size": 24
+    },
+    {
+      "item": "+38 (095) 285-64-34",
+      "link": "tel:+380952856434",
+      "icon": "phone.svg",
+      "size": 22
+    }
+  ],
+  "summary": {
+    "id": "summary",
+    "symbol": "S",
+    "title": "SUMMARY",
+    "description": [
+      "Result-oriented Frontend Developer (Vue.js) with 3+ years of commercial experience building scalable, high-performance web applications. Specialized in the Vue 2/3 ecosystem (Composition API, Pinia, Vuetify) with a strong focus on clean architecture, SEO optimization, and performance improvements based on Lighthouse metrics. Leveraging a background in management to deeply understand business processes, I independently design and implement pixel-perfect responsive features, improve existing codebases, and deliver solutions tailored for long-term product scalability."
+    ]
+  },
+  "projects": {
+    "id": "projects",
+    "symbol": "P",
+    "title": "PROJECTS",
+    "description": [
+      {
+        "name": "Dent-LIfe Dental Clinic",
+        "link": "https://dent-life.kiev.ua",
+        "icon": "logo-green.svg",
+        "achievements": [
+          "Developed SEO-optimized website using Vue 3 + Vite SSG",
+          "Implemented multi-language support (UA / EN / RU)",
+          "Built 6 service pages with structured SEO content",
+          "Integrated schema.org (JSON-LD), Google Maps API, Google Reviews",
+          "Optimized performance and initial load speed (SSG, request throttling)",
+          "Fully responsive UI with reusable components"
+        ]
+      },
+      {
+        "name": "Rock Paper Scissors (Marketing Agency startup)»",
+        "link": "https://therockpaperscissors.com",
+        "icon": "RPS_logo.svg",
+        "achievements": [
+          "Built SPA using Vue 3 (Composition API) + Vite, no router",
+          "Implemented lead generation forms with validation and email submission (Formspree)",
+          "Added multi-layer bot protection (honeypot, timing check, reCAPTCHA)",
+          "Managed global state with Pinia",
+          "Created reusable UI components and SVG-based responsive design"
+        ]
+      }
+    ]
+  },
+  "experience": {
+    "id": "experience",
+    "symbol": "W",
+    "title": "WORK EXPERIENCE",
+    "description": [
+      {
+        "position": "Frontend Developer (Vue.js)",
+        "company": "TalentFly",
+        "company_icon": "talentfly.svg",
+        "company_icon_size": 18,
+        "link": "https://talentfly.com",
+        "period": "02/2024 - 09/2025",
+        "achievements": [
+          "Developed and maintained Vue 2/3 components using Composition and Options API",
+          "Built reusable component structures that improved development speed for new features",
+          "Implemented responsive, pixel-perfect UI based on Figma designs",
+          "Customized Vuetify components to match project design system",
+          "Integrated Swiper Element for interactive UI features",
+          "Performed cross-browser testing (BrowserStack) and fixed UI/UX issues",
+          "Improved code maintainability by refactoring existing components"
+        ]
+      },
+      {
+        "position": "Web / E-commerce Developer",
+        "company": "OkDveri",
+        "company_icon": "okdveri.svg",
+        "company_icon_size": 22,
+        "link": "https://www.okdveri.com.ua",
+        "period": "02/2019 - 10/2023",
+        "achievements": [
+          "Developed and maintained e-commerce website (WooCommerce + Elementor)",
+          "Built a custom Vue application to automate bulk uploading of variable products",
+          "Improved product page structure and SEO, increasing visibility in search engines",
+          "Optimized UI/UX of product pages to improve user engagement",
+          "Managed hosting, domain, and Google Business profile",
+          "Created marketing materials, product visuals, and branding assets"
+        ]
+      },
+      {
+        "position": "System Administrator / Securities Operations Specialist",
+        "company": "NCH Advisors Inc. (Representative Office in Ukraine)",
+        "company_icon": "",
+        "company_icon_size": "",
+        "link": "https://nchcapital.com/",
+        "period": "01/1996 - 10/2017",
+        "achievements": [
+          "IT infrastructure support, networking, system administration",
+          "Experience working with financial data and international operations"
+        ]
+      }
+    ]
+  },
+  "education": {
+    "id": "education",
+    "symbol": "E",
+    "title": "EDUCATION",
+    "description": [
+      {
+        "institution": "Economical Institute of Management, Kiev",
+        "degree": "Specialist in Management"
+      }
+    ]
+  },
+  "skills": {
+    "id": "skills",
+    "symbol": "S",
+    "title": "SKILLS",
+    "description": [
+      {
+        "id": 101,
+        "type": 1,
+        "skill": "JavaScript",
+        "img": "js.svg",
+        "img_size": 24
+      },
+      {
+        "id": 102,
+        "type": 2,
+        "skill": [
+          { "item": "Vue", "img": "vue.svg", "img_size": 28 },
+          { "item": "Vuex", "img": "divider.svg", "img_size": 4 },
+          { "item": "VueRouter", "img": "divider.svg", "img_size": 4 }
+        ]
+      },
+      {
+        "id": 103,
+        "type": 1,
+        "skill": "Composition | Options API",
+        "img": "",
+        "img_size": 20
+      },
+      {
+        "id": 104,
+        "type": 1,
+        "skill": "Pinia",
+        "img": "pinia.svg",
+        "img_size": 20
+      },
+      {
+        "id": 105,
+        "type": 1,
+        "skill": "Vuetify",
+        "img": "vuetify.svg",
+        "img_size": 24
+      },
+      {
+        "id": 106,
+        "type": 2,
+        "skill": [
+          { "item": "HTML", "img": "html.svg", "img_size": 20 },
+          { "item": "CSS", "img": "css.svg", "img_size": 20 },
+          { "item": "SCSS", "img": "sass.svg", "img_size": 24 }
+        ]
+      },
+      {
+        "id": 107,
+        "type": 1,
+        "skill": "Swiper Element",
+        "img": "swiper.svg",
+        "img_size": 20
+      },
+      {
+        "id": 108,
+        "type": 1,
+        "skill": "Webpack",
+        "img": "webpack.svg",
+        "img_size": 20
+      },
+      {
+        "id": 109,
+        "type": 1,
+        "skill": "Vite",
+        "img": "vite.svg",
+        "img_size": 20
+      },
+      {
+        "id": 110,
+        "type": 1,
+        "skill": "Vite SSG",
+        "img": "",
+        "img_size": 20
+      },
+      {
+        "id": 111,
+        "type": 1,
+        "skill": "Figma",
+        "img": "figma.svg",
+        "img_size": 16
+      },
+      {
+        "id": 112,
+        "type": 1,
+        "skill": "Node.js",
+        "img": "node.svg",
+        "img_size": 32
+      },
+      {
+        "id": 113,
+        "type": 1,
+        "skill": "TypeScript",
+        "img": "ts.png",
+        "img_size": 24
+      },
+      {
+        "id": 114,
+        "type": 1,
+        "skill": "Git",
+        "img": "git.svg",
+        "img_size": 20
+      },
+      {
+        "id": 115,
+        "type": 1,
+        "skill": "CorelDRAW",
+        "img": "coreldraw.svg",
+        "img_size": 16
+      },
+      {
+        "id": 116,
+        "type": 1,
+        "skill": "REST API",
+        "img": "",
+        "img_size": 20
+      },
+      {
+        "id": 117,
+        "type": 1,
+        "skill": "Lighthouse",
+        "img": "lighthouse.png",
+        "img_size": 24
+      },
+      {
+        "id": 118,
+        "type": 1,
+        "skill": "SEO/Performance optimization",
+        "img": "",
+        "img_size": 24
+      },
+      {
+        "id": 119,
+        "type": 1,
+        "skill": "PerfectPixel",
+        "img": "perfectpixel.svg",
+        "img_size": 20
+      },
+      {
+        "id": 120,
+        "type": 1,
+        "skill": "Responsive Design",
+        "img": "",
+        "img_size": 20
+      },
+      {
+        "id": 121,
+        "type": 1,
+        "skill": "BrowserStack Testing",
+        "img": "browserstack.svg",
+        "img_size": 20
+      }
+    ]
+  },
+  "languages": {
+    "id": "languages",
+    "symbol": "L",
+    "title": "LANGUAGES",
+    "description": [
+      { "language": "English", "level": "work proficiency" },
+      { "language": "Ukrainian | Russian", "level": "native" }
+    ]
+  }
+}
