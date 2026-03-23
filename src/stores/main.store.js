@@ -13,10 +13,9 @@ export const useMainStore = defineStore('main', () => {
       console.warn('Unexpected theme name:', themeName);
       return;
     }
-    // Changing theme in Vuetify
-    theme.global.name.value = themeName;
-    // and in store
     currentTheme.value = themeName;
+    // and changing theme in Vuetify
+    theme.change(themeName);
   };
 
   const updateLang = (lang) => {

@@ -31,15 +31,13 @@ export function useResume(lang = 'uk') {
     });
 
     // 5. Skills
-    data.skills.description.forEach((s) => {
-      if (s.type === 1) {
-        s.img = getAssetUrl(s.img);
-      } else if (s.type === 2) {
-        s.skill.forEach((sub) => {
-          sub.img = getAssetUrl(sub.img);
-        });
-      }
+    data.skills.sections.forEach((sec) => {
+      sec.items.forEach((it) => {
+        it.img = getAssetUrl(it.img);
+      });
     });
+    const mainSkillImg = data.skills.essential_skill.img;
+    data.skills.essential_skill.img = getAssetUrl(mainSkillImg);
 
     return data;
   });
