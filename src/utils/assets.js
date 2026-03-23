@@ -14,23 +14,20 @@ export function getIconPath(file) {
 }
 
 // New utils for 2026
-const uiAssets = import.meta.glob(
-  '../assets/images/ui/*.{png,jpg,jpeg,svg,webp}',
+// Символ ** означает "любая подпапка"
+const allAssets = import.meta.glob(
+  '../assets/images/**/*.{png,jpg,jpeg,svg,webp}',
   { eager: true }
 );
-// Создаем карту: { 'js.svg': '/assets/js.hash.svg' }
+
 export const assetMap = Object.fromEntries(
-  Object.entries(uiAssets).map(([path, module]) => {
+  Object.entries(allAssets).map(([path, module]) => {
+    // Получаем только имя файла: "folder/sub/icon.svg" -> "icon.svg"
     const filename = path.split('/').pop();
     return [filename, module.default];
   })
 );
-/**
- * Возвращает готовый URL для файла из карты
- */
+
 export function getAssetUrl(filename) {
-  if (!filename) {
-    return '';
-  }
   return assetMap[filename] || '';
 }

@@ -44,7 +44,7 @@
     "title": "PROJECTS",
     "description": [
       {
-        "name": "Dent-LIfe Dental Clinic",
+        "title": "Dent-LIfe Dental Clinic",
         "link": "https://dent-life.kiev.ua",
         "icon": "logo-green.svg",
         "achievements": [
@@ -57,8 +57,8 @@
         ]
       },
       {
-        "name": "Rock Paper Scissors (Marketing Agency startup)»",
-        "link": "https://therockpaperscissors.com",
+        "title": "Rock Paper Scissors (Marketing Agency startup)»",
+        "link": "https://therockpapperscissors.com",
         "icon": "RPS_logo.svg",
         "achievements": [
           "Built SPA using Vue 3 (Composition API) + Vite, no router",

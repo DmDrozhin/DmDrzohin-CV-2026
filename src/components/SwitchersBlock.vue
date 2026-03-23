@@ -1,50 +1,52 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { computed } from 'vue';
+import { useMainStore } from '@/stores/main.store.js';
 
-const emit = defineEmits(['change-lang', 'change-theme']);
-const currentLanguage = ref('ua');
-const currentTheme = ref('light');
-watch(
-  () => currentTheme.value,
-  (newTheme) => {
-    if (newTheme !== undefined) {
-      emit('change-theme', newTheme);
-    }
-  }
-);
-watch(
-  () => currentLanguage.value,
-  (lang) => {
-    if (lang !== undefined) {
-      emit('change-lang', lang);
-    }
-  }
-);
+const store = useMainStore();
+
+const langModel = computed({
+  get: () => store.currentLang,
+  set: (val) => val && store.updateLang(val)
+});
+
+const themeModel = computed({
+  get: () => store.currentTheme,
+  set: (val) => val && store.updateTheme(val)
+});
 </script>
 <template>
   <div class="switcher-block">
     <v-btn-toggle
-      :key="1"
-      v-model="currentLanguage"
-      class="switcher-block__toggle language"
+      v-model="langModel"
+      mandatory
+      class="switcher-block__toggle"
       density="compact"
+      variant="text"
+      selected-class="text-primary"
     >
-      <v-btn variant="text" size="x-small" slim value="ua" aria-label="switch language">UA</v-btn>
-      <v-btn variant="text" size="x-small" slim value="en" aria-label="switch language">EN</v-btn>
+      <v-btn value="ua" size="x-small" slim>UA</v-btn>
+      <v-btn value="en" size="x-small" slim>EN</v-btn>
     </v-btn-toggle>
+
+    <div class="divider mx-2">|</div>
+
     <v-btn-toggle
-      :key="2"
-      v-model="currentTheme"
-      class="switcher-block__toggle theme"
+      v-model="themeModel"
+      mandatory
+      class="switcher-block__toggle"
       density="compact"
+      variant="text"
+      selected-class="text-primary"
     >
-      <v-btn variant="text" size="x-small" slim value="light" aria-label="switch theme">Light</v-btn>
-      <v-btn variant="text" size="x-small" slim value="dark" aria-label="switch theme">Dark</v-btn>
+      <v-btn value="light" size="x-small" slim>Light</v-btn>
+      <v-btn value="dark" size="x-small" slim>Dark</v-btn>
     </v-btn-toggle>
   </div>
 </template>
 <style lang="scss" scoped>
 .switcher-block {
+  display: flex;
+  gap: 8px;
   &__toggle {
     max-height: 20px;
     overflow-x: hidden;
