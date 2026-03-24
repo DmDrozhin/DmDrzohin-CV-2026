@@ -1,20 +1,18 @@
-smAndDown
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { mdiAccountTie } from '@mdi/js';
 
 import { useDisplay } from 'vuetify';
-const { smAndDown, xs } = { ...useDisplay() };
+const { smAndDown, xs } = useDisplay();
 
 import { useMainStore } from '@/stores/main.store.js';
 const store = useMainStore();
-
-import { mdiAccountTie } from '@mdi/js';
-import { createAssetMap } from '@/utils/assets';
 
 import PagePreloader from '@/components/PagePreloader.vue';
 import SwitchersBlock from '@/components/SwitchersBlock.vue';
 import SliderSwiper from '@/components/SliderSwiper.vue';
 
+// Resume Sections
 import SectionSummary from '@/components/SectionSummary.vue';
 import SectionExperience from '@/components/SectionExperience.vue';
 import SectionProjects from '@/components/SectionProjects.vue';
@@ -22,93 +20,68 @@ import SectionSkills from '@/components/SectionSkills.vue';
 import SectionEducation from '@/components/SectionEducation.vue';
 import SectionLanguages from '@/components/SectionLanguages.vue';
 
-import { useResume } from '@/composables/useResume';
-const lang = computed(() => store.currentLang);
-const { resume } = useResume(lang);
+const isLoading = computed(() => store.isLoading);
 
-const isLoading = computed(() => store.loading || false);
-
-const drawer = ref(true);
-
-const icons = import.meta.glob('@/assets/images/ui/*', { eager: true });
-const iconsMap = createAssetMap(icons);
-
-const avatar = computed(() =>
-  store.currentTheme === 'light'
-    ? resume.value.avatar_light
-    : resume.value.avatar_dark
+const staticSection = computed(() => store.resumeData?.sectionsStatic || {});
+const dynamicSection = computed(() => store.resumeData?.sectionsDynamic || {});
+const header = computed(() => store.resumeData?.header || {});
+const bgImages = computed(
+  () => header.value?.backgrounds?.map((b) => b.img) || []
 );
-
-const contacts = computed(() => resume.value.contacts || []);
-
-// Observing height of header and calculating height of sidebar
-const resumeHeader = ref(null);
-const headerHeight = ref(null);
-const headerHeightMob = ref(null);
-const observer = new ResizeObserver((entries) => {
-  if (entries.length) {
-    const { top, height } = entries[0].contentRect;
-    headerHeight.value = height;
-    headerHeightMob.value = top + height;
-  }
-});
-onMounted(() => observer.observe(resumeHeader.value));
-// Stop observing the header
-onBeforeUnmount(() => {
-  if (resumeHeader.value) {
-    observer.unobserve(resumeHeader.value);
-  }
-});
 
 const activeSlide = ref(0);
-const darkSlidesMap = ref([1]);
-// If slide is dark, we can style it specifically
-const isSlideDark = computed(
-  () => darkSlidesMap.value.indexOf(activeSlide.value) !== -1
-);
-// Importing all background images from folder
-const headerBackground = import.meta.glob('@/assets/images/background/*', {
-  eager: true
+const isCurrentSlideDark = computed(() => {
+  const currentBg = header.value?.backgrounds?.[activeSlide.value];
+  return currentBg?.dark || false;
 });
-const urlMap = Object.values(createAssetMap(headerBackground));
+const drawer = ref(true);
 
+onMounted(() => {
+  store.loadResumeData();
+});
 </script>
+
 <template>
   <div class="my-resume">
     <PagePreloader v-if="isLoading" />
-    <v-btn
-      v-if="!drawer"
-      class="my-resume__button show-skills"
-      variant="flat"
-      color="#77A608"
-      size="x-small"
-      position="sticky"
-      aria-label="open skills"
-      @click="drawer = !drawer"
-      >skills</v-btn
-    >
-    <v-app-bar class="my-resume__header" absolute height="auto">
+
+    <header v-if="Object.keys(header).length" class="my-resume__header">
       <div ref="resumeHeader" class="user__wrapper">
-        <div class="user__adaptive-row" :class="{ 'light-text': isSlideDark }">
+        <div
+          class="user__adaptive-row"
+          :class="{ 'light-text': isCurrentSlideDark }"
+        >
           <div class="user__titles">
-            <template v-if="urlMap.length">
+            <template v-if="bgImages.length">
               <SliderSwiper
                 class="user__swiper"
-                :options="{ arr: urlMap, isDark: isSlideDark }"
+                :options="{
+                  arr: bgImages,
+                  isDark: isCurrentSlideDark
+                }"
                 @change-slide="($event) => (activeSlide = $event)"
               />
             </template>
             <SwitchersBlock class="user__switcher" />
-            <div class="user__description person">
-              <div class="person__name">{{ resume.name }}</div>
-              <div class="person__title">{{ resume.title }}</div>
-              <div class="person__location">{{ resume.location }}</div>
+            <div
+              v-if="dynamicSection.person?.name"
+              class="user__description person"
+            >
+              <div class="person__name">
+                {{ dynamicSection.person.name }}
+              </div>
+              <div class="person__title">
+                {{ dynamicSection.person.vacancy }}
+              </div>
+              <div class="person__location">
+                {{ dynamicSection.person.location }}
+              </div>
             </div>
           </div>
           <div class="user__photo-wrapper">
             <v-img
-              v-if="avatar"
-              :src="avatar"
+              v-if="store.avatar"
+              :src="store.avatar"
               class="user__photo"
               height="150"
               width="150"
@@ -117,9 +90,9 @@ const urlMap = Object.values(createAssetMap(headerBackground));
             <v-icon v-else size="150" color="#969595" :icon="mdiAccountTie" />
           </div>
         </div>
-        <div v-if="contacts.length" class="user__meta-data">
+        <div v-if="header?.contacts?.length" class="user__meta-data">
           <v-btn
-            v-for="contact in contacts"
+            v-for="contact in header.contacts"
             :key="contact.item"
             :href="contact.link"
             target="_blank"
@@ -127,7 +100,7 @@ const urlMap = Object.values(createAssetMap(headerBackground));
             tag="a"
             variant="text"
             size="small"
-            aria-label="open contact"
+            aria-label="open user contact button"
             class="user__button meta-item"
           >
             <v-img
@@ -143,23 +116,24 @@ const urlMap = Object.values(createAssetMap(headerBackground));
             location="top"
             max-height="24"
           >
+            <!-- 🚨 Activate sidebar button 🚨 -->
             <template #activator="{ props }">
               <v-btn
-                v-if="smAndDown.value"
+                v-if="smAndDown"
                 v-bind="props"
-                class="user__button skills animated-button"
+                class="sidebar-activator"
                 icon
-                :size="xs.value ? 'large' : 'x-small'"
+                :size="xs ? 'large' : 'x-small'"
                 :class="{ small: xs }"
-                aria-label="open skills"
+                aria-label="activate sidebar animated button"
                 @click="drawer = !drawer"
               >
                 <v-img
-                  :width="xs.value ? 48 : 32"
-                  class="animated-button__icon"
+                  :width="xs ? 48 : 32"
+                  class="sidebar-activator__icon"
                   :class="{ open: drawer }"
-                  :src="iconsMap['arrow-bold-left.svg']"
-                  alt="open skills icon"
+                  :src="header?.activator?.img"
+                  alt="activate sidebar button icon"
                 />
               </v-btn>
             </template>
@@ -167,33 +141,65 @@ const urlMap = Object.values(createAssetMap(headerBackground));
         </div>
         <div class="user__gradient"></div>
       </div>
-    </v-app-bar>
-    <!-- SIDEBAR -->
-    <v-navigation-drawer
-      v-model="drawer"
-      class="my-resume__sidebar"
-      location="right"
-      :permanent="!smAndDown.value"
-      :mobile="smAndDown.value"
-      color="grey-lighten-4"
-      absolute
-      width="224"
-    >
-      <SectionSkills :options="resume.skills" />
-      <SectionEducation :options="resume.education" />
-      <SectionLanguages :options="resume.languages" />
-    </v-navigation-drawer>
-    <!-- MAIN -->
-    <v-main class="my-resume__main">
-      <v-container class="my-resume__container">
-        <SectionSummary v-if="resume.summary" :options="resume.summary" />
-        <SectionProjects v-if="resume.projects" :options="resume.projects" />
-        <SectionExperience
-          v-if="resume.experience"
-          :options="resume.experience"
+      <v-btn
+        v-if="!drawer"
+        class="my-resume__button open-sidebar small"
+        variant="flat"
+        color="#77A608"
+        size="x-small"
+        position="sticky"
+        aria-label="open skills right side button"
+        @click="drawer = !drawer"
+        >skills
+      </v-btn>
+    </header>
+    <v-container class="my-resume__container">
+      <!-- MAIN -->
+      <v-main v-if="Object.keys(dynamicSection).length" class="my-resume__main">
+        <v-container class="my-resume__main-wrapper">
+          <SectionSummary
+            v-if="dynamicSection.summary"
+            :options="dynamicSection.summary"
+          />
+          <SectionProjects
+            v-if="dynamicSection.projects"
+            :options="dynamicSection.projects"
+          />
+          <SectionExperience
+            v-if="dynamicSection.experience"
+            :options="dynamicSection.experience"
+          />
+        </v-container>
+      </v-main>
+      <!-- SIDEBAR -->
+      <v-navigation-drawer
+        v-if="
+          Object.keys(staticSection).length &&
+          Object.keys(dynamicSection).length
+        "
+        v-model="drawer"
+        class="my-resume__sidebar"
+        location="right"
+        :permanent="!smAndDown"
+        :mobile="smAndDown"
+        color="grey-lighten-4"
+        absolute
+        width="224"
+      >
+        <SectionSkills
+          v-if="staticSection.skills"
+          :options="staticSection.skills"
         />
-      </v-container>
-    </v-main>
+        <SectionEducation
+          v-if="dynamicSection.education"
+          :options="dynamicSection.education"
+        />
+        <SectionLanguages
+          v-if="dynamicSection.languages"
+          :options="dynamicSection.languages"
+        />
+      </v-navigation-drawer>
+    </v-container>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -218,27 +224,21 @@ const urlMap = Object.values(createAssetMap(headerBackground));
   &__header {
     overflow: visible !important;
   }
+  &__container {
+    position: relative;
+    padding: 0 !important;
+  }
   &__sidebar {
-    top: v-bind('headerHeight + 12 + "px"');
     height: auto;
     border-radius: 24px 0 0 0;
-    @include media-down(xs) {
-      height: fit-content;
-      top: v-bind('headerHeightMob + 12 + "px"');
-    }
+    // }
   }
-  &__main {
-    padding-top: v-bind('headerHeight + "px"');
-    @include media-down(xs) {
-      padding-top: v-bind('headerHeightMob + "px"');
-    }
-  }
-  &__container {
+  &__main-wrapper {
     min-height: 940px;
     position: relative;
     padding: 16px;
   }
-  &__button.show-skills {
+  &__button.open-sidebar {
     position: fixed;
     left: auto;
     right: -34px;
@@ -247,7 +247,7 @@ const urlMap = Object.values(createAssetMap(headerBackground));
     transform-origin: center;
     border-radius: 6px 6px 0 0;
     padding: 0 2px 0 8px;
-    z-index: 100;
+    z-index: 10;
     display: none;
     @include media-down(xs) {
       display: inline-block;
@@ -259,6 +259,7 @@ const urlMap = Object.values(createAssetMap(headerBackground));
     width: 100%;
   }
   &__adaptive-row {
+    min-height: 160px;
     position: relative;
     display: grid;
     grid-template-columns: 1fr auto;
@@ -285,7 +286,6 @@ const urlMap = Object.values(createAssetMap(headerBackground));
     position: relative;
     padding: 24px 32px;
     text-align: center;
-    @include Prevent-select;
     @include media-down(xxs) {
       position: static;
     }
@@ -296,14 +296,27 @@ const urlMap = Object.values(createAssetMap(headerBackground));
     bottom: 0;
     left: 0;
     height: -webkit-fill-available;
-    z-index: 0;
+    z-index: 1;
   }
   &__description {
+    position: relative;
+    pointer-events: none;
+    z-index: 10;
+    transform: translateZ(0);
     text-align: left;
     @include media-down(xxs) {
       text-align: center;
     }
     .person {
+      &__name,
+      &__title,
+      &__location {
+        width: fit-content;
+        pointer-events: auto;
+        @include media-down(xxs) {
+          margin: 0 auto;
+        }
+      }
       &__name {
         font-size: 2rem;
         letter-spacing: 2.7px;
@@ -312,8 +325,6 @@ const urlMap = Object.values(createAssetMap(headerBackground));
       &__title {
         font-size: 1.4rem;
       }
-      // &__location {
-      // }
     }
   }
 
@@ -324,6 +335,9 @@ const urlMap = Object.values(createAssetMap(headerBackground));
     grid-area: photo;
     border-radius: 16px 0 0 0 !important;
     margin-top: auto;
+    position: relative;
+    pointer-events: none;
+    z-index: 1;
     @include media-down(xs) {
       margin-inline: auto;
     }
@@ -363,19 +377,6 @@ const urlMap = Object.values(createAssetMap(headerBackground));
       width: 100%;
       max-width: 200px;
       flex-shrink: 1;
-    }
-  }
-  &__button.skills {
-    flex-shrink: 0;
-    position: absolute;
-    margin: 0 8px;
-    right: 16px;
-    z-index: 2;
-    transition: all 0.3s ease-in;
-    @include media-down(xs) {
-      top: unset !important;
-      bottom: 1rem;
-      margin: 0;
     }
   }
   &__button.meta-item:hover::before {
@@ -424,8 +425,20 @@ const urlMap = Object.values(createAssetMap(headerBackground));
     }
   }
 }
-.animated-button {
-  position: relative;
+.sidebar-activator {
+  flex-shrink: 0;
+  position: absolute;
+  margin: 0 8px;
+  right: 16px;
+  z-index: 2;
+  transition: all 0.3s ease-in;
+  background: transparent;
+  @include media-down(xs) {
+    top: unset !important;
+    bottom: 1rem;
+    margin: 0;
+  }
+  // 🥎 Animated dot
   &::before {
     content: '•';
     position: absolute;
@@ -436,8 +449,8 @@ const urlMap = Object.values(createAssetMap(headerBackground));
     font-size: 1rem;
     font-weight: bold;
     color: $green-md;
-    animation: circular-move 8s linear infinite;
     z-index: 100;
+    animation: circular-move 8s linear infinite;
     @include media-down(xs) {
       top: 19px;
     }
@@ -468,20 +481,10 @@ const urlMap = Object.values(createAssetMap(headerBackground));
       overflow: visible;
     }
   }
-  &__sidebar {
-    .section {
-      &__wrapper.skills {
-        flex: 1;
-        .section.skills {
-          .main-skill::before {
-            animation: pulse-shadow 1.3s ease-in-out forwards;
-            animation-delay: 1.5s;
-          }
-        }
-      }
-    }
-  }
   .v-navigation-drawer {
+    // Adding slim white gap over sidebar and correspondent reducing it height
+    margin-top: 8px;
+    height: calc(100% - 8px) !important;
     &__content {
       display: flex;
       flex-direction: column;
@@ -491,7 +494,7 @@ const urlMap = Object.values(createAssetMap(headerBackground));
       @include Scrollbar;
     }
   }
-  &__button.show-skills {
+  &__button.open-sidebar {
     .v-btn {
       &__content {
         line-height: 1;
@@ -511,27 +514,6 @@ const urlMap = Object.values(createAssetMap(headerBackground));
       &__content {
         gap: 8px;
       }
-    }
-  }
-}
-@keyframes pulse-shadow {
-  0% {
-    box-shadow: 0 0 0 0 $green-md;
-  }
-  50% {
-    box-shadow: 0 0 3px 6px $green-md;
-  }
-  100% {
-    box-shadow: 0 0 0 0 $green-md;
-  }
-}
-.v-overlay-container {
-  .v-overlay {
-    &__content {
-      max-height: fit-content !important;
-      padding: 2px 8px !important;
-      outline: 1px solid $green-md;
-      font-size: 0.8rem !important;
     }
   }
 }
