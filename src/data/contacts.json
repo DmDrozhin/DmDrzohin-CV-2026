@@ -1,0 +1,41 @@
+{
+  "avatar": {
+    "avatar_light": "avatarLightTheme.jpeg",
+    "avatar_dark": "avatarDarkTheme.jpeg"
+  },
+  "contacts": [
+    {
+      "item": "ddrozhin@gmail.com",
+      "link": "mailto:ddrozhin@gmail.com",
+      "icon": "gmail.svg",
+      "size": 24
+    },
+    {
+      "item": "github.com/DmDrozhin",
+      "link": "https://github.com/DmDrozhin",
+      "icon": "github.svg",
+      "size": 24
+    },
+    {
+      "item": "@DmDrozhin",
+      "link": "https://t.me/DmDrozhin",
+      "icon": "telegram.svg",
+      "size": 24
+    },
+    {
+      "item": "+38 (095) 285-64-34",
+      "link": "tel:+380952856434",
+      "icon": "phone.svg",
+      "size": 22
+    }
+  ],
+  "backgrounds": [
+    { "img": "bg-1.svg", "dark": false },
+    { "img": "bg-2.svg", "dark": true },
+    { "img": "bg-3.svg", "dark": false },
+    { "img": "bg-4.svg", "dark": false }
+  ],
+  "activator": {
+    "img": "arrow-bold-left.svg"
+  }
+}
