@@ -24,8 +24,8 @@ const themeModel = computed({
       variant="text"
       selected-class="text-primary"
     >
-      <v-btn value="ua" size="x-small" slim>UA</v-btn>
-      <v-btn value="en" size="x-small" slim>EN</v-btn>
+      <v-btn class="switcher-block__button" value="ua" size="x-small" slim>UA</v-btn>
+      <v-btn class="switcher-block__button" value="en" size="x-small" slim>EN</v-btn>
     </v-btn-toggle>
 
     <div class="divider mx-2">|</div>
@@ -38,14 +38,15 @@ const themeModel = computed({
       variant="text"
       selected-class="text-primary"
     >
-      <v-btn value="light" size="x-small" slim>Light</v-btn>
-      <v-btn value="dark" size="x-small" slim>Dark</v-btn>
+      <v-btn class="switcher-block__button" value="light" size="x-small" slim>Light</v-btn>
+      <v-btn class="switcher-block__button" value="dark" size="x-small" slim>Dark</v-btn>
     </v-btn-toggle>
   </div>
 </template>
 <style lang="scss" scoped>
 .switcher-block {
   display: flex;
+  @include Prevent-select;
   gap: 8px;
   &__toggle {
     max-height: 20px;
@@ -56,6 +57,9 @@ const themeModel = computed({
     margin: 0 8px;
     line-height: 1;
     color: rgba(var(--v-theme-background-divider));
+  }
+  &__button {
+    cursor: pointer;
   }
 }
 </style>
