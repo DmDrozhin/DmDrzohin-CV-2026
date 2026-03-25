@@ -143,14 +143,14 @@ onMounted(() => {
       </div>
       <v-btn
         v-if="!drawer"
-        class="my-resume__button open-sidebar small"
+        class="my-resume__button open-sidebar-btn small"
         variant="flat"
         color="#77A608"
         size="x-small"
         position="sticky"
         aria-label="open skills right side button"
         @click="drawer = !drawer"
-        >skills
+        ><span class="open-sidebar-btn__text">SKILLS</span>
       </v-btn>
     </header>
     <v-container class="my-resume__container">
@@ -229,16 +229,19 @@ onMounted(() => {
     padding: 0 !important;
   }
   &__sidebar {
-    height: auto;
     border-radius: 24px 0 0 0;
-    // }
+    margin-top: 8px;
+    height: calc(100% - 8px) !important;
+    @include media-down(xs) {
+      height: fit-content !important;
+    }
   }
   &__main-wrapper {
     min-height: 940px;
     position: relative;
     padding: 16px;
   }
-  &__button.open-sidebar {
+  .open-sidebar-btn {
     position: fixed;
     left: auto;
     right: -34px;
@@ -251,6 +254,10 @@ onMounted(() => {
     display: none;
     @include media-down(xs) {
       display: inline-block;
+    }
+    &__text {
+      line-height: 1;
+      letter-spacing: 0.5rem;
     }
   }
 }
@@ -482,9 +489,6 @@ onMounted(() => {
     }
   }
   .v-navigation-drawer {
-    // Adding slim white gap over sidebar and correspondent reducing it height
-    margin-top: 8px;
-    height: calc(100% - 8px) !important;
     &__content {
       display: flex;
       flex-direction: column;
@@ -492,15 +496,6 @@ onMounted(() => {
       padding: 12px;
       border-radius: inherit;
       @include Scrollbar;
-    }
-  }
-  &__button.open-sidebar {
-    .v-btn {
-      &__content {
-        line-height: 1;
-        letter-spacing: 0.5rem;
-        text-transform: uppercase;
-      }
     }
   }
 }
