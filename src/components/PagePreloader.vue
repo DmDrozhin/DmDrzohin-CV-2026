@@ -1,6 +1,6 @@
 <template>
   <div class="page-loader">
-    <v-progress-circular indeterminate color="green" />
+    <v-progress-circular indeterminate color="#77A608" />
   </div>
 </template>
 <style scoped lang="scss">
