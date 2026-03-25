@@ -90,6 +90,7 @@ onMounted(() => {
             <v-icon v-else size="150" color="#969595" :icon="mdiAccountTie" />
           </div>
         </div>
+        <!-- Block of contact links under avatar -->
         <div v-if="header?.contacts?.length" class="user__meta-data">
           <v-btn
             v-for="contact in header.contacts"
@@ -116,7 +117,7 @@ onMounted(() => {
             location="top"
             max-height="24"
           >
-            <!-- 🚨 Activate sidebar button 🚨 -->
+            <!-- 🚨 Large activating sidebar button 🚨 -->
             <template #activator="{ props }">
               <v-btn
                 v-if="smAndDown"
@@ -141,9 +142,10 @@ onMounted(() => {
         </div>
         <div class="user__gradient"></div>
       </div>
+      <!-- 🚨 Small aside activating sidebar button 🚨 -->
       <v-btn
         v-if="!drawer"
-        class="my-resume__button open-sidebar-btn small"
+        class="my-resume__button open-sidebar-btn"
         variant="flat"
         color="#77A608"
         size="x-small"
@@ -245,12 +247,12 @@ onMounted(() => {
     position: fixed;
     left: auto;
     right: -34px;
-    top: 50vh;
+    bottom: 10vh;
     transform: rotate(-90deg);
     transform-origin: center;
     border-radius: 6px 6px 0 0;
     padding: 0 2px 0 8px;
-    z-index: 10;
+    z-index: 1;
     display: none;
     @include media-down(xs) {
       display: inline-block;
