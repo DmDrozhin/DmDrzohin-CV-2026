@@ -36,7 +36,10 @@ defineProps({
           >
             {{ entry.position }}
           </div>
-          <div class="experience__wrapper">
+          <div
+            class="experience__wrapper"
+            :class="{ 'xs-wrap': entry.id === 'nch' }"
+          >
             <v-btn
               class="experience__button"
               variant="text"
@@ -48,12 +51,12 @@ defineProps({
             >
               <v-img
                 v-if="entry.company_icon"
-                class="experience__logo"
+                class="experience__button-icon"
                 :src="entry.company_icon"
                 :width="entry.company_icon_size"
                 alt="Company logo"
               />
-              {{ entry.company }}
+              <span class="experience__button-txt">{{ entry.company }}</span>
             </v-btn>
             <div v-if="entry.period" class="experience__period">
               {{ entry.period }}
@@ -73,6 +76,9 @@ defineProps({
 <style lang="scss" scoped>
 .experience {
   width: 100%;
+  &__entry {
+    margin-top: 2px;
+  }
   &__position {
     font-size: 1rem;
     font-weight: 600;
@@ -85,25 +91,35 @@ defineProps({
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 2px 8px;
     &.outer {
       padding-left: 24px;
+      @include media-down(xs) {
+        flex-wrap: wrap;
+      }
     }
     &.block {
       display: block;
     }
+    &.xs-wrap {
+      flex-wrap: wrap;
+    }
   }
   &__button {
+    height: auto;
     font-size: 0.85rem;
   }
-  &__logo {
+  &__button-icon {
     margin-right: 4px;
   }
-
+  &__button-txt {
+    text-wrap: balance;
+  }
   &__company {
     color: rgb(var(--v-theme-background-divider));
   }
   &__period {
+    white-space: nowrap;
     color: rgb(var(--v-theme-accented-text));
     font-size: 0.85rem;
   }

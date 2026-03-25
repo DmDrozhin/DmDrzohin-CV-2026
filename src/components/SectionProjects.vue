@@ -34,7 +34,6 @@ defineProps({
             target="_blank"
             rel="noopener noreferrer"
           >
-            {{ entry.title }}
             <v-img
               v-if="entry.icon"
               class="projects__logo"
@@ -42,6 +41,9 @@ defineProps({
               :width="entry.icon_size"
               alt="Company logo"
             />
+            <span class="projects__button-txt">
+              {{ entry.title }}
+            </span>
           </v-btn>
         </div>
         <ul v-if="entry.achievements.length">
@@ -57,22 +59,27 @@ defineProps({
 <style lang="scss" scoped>
 .projects {
   width: 100%;
+  &__entry {
+    margin-top: 2px;
+  }
   &__wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     gap: 8px;
     padding-left: 14px;
   }
   &__button {
+    height: auto;
+    min-width: 0 !important;
+    max-width: fit-content;
     font-size: 1rem;
     font-weight: 600;
   }
-  &__logo {
-    margin-left: 4px;
+  &__button-txt {
+    text-wrap: balance;
+    flex-shrink: 1;
   }
-
+  &__logo {
+    margin-right: 8px;
+  }
   &__company {
     color: rgb(var(--v-theme-background-divider));
   }
