@@ -512,4 +512,14 @@ onMounted(() => {
     }
   }
 }
+.v-overlay-container {
+  .v-overlay {
+    &__content {
+      max-height: fit-content !important;
+      padding: 2px 8px !important;
+      outline: 1px solid $green-md;
+      font-size: 0.8rem !important;
+    }
+  }
+}
 </style>
