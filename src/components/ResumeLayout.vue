@@ -186,7 +186,7 @@ onMounted(() => {
         :mobile="smAndDown"
         color="grey-lighten-4"
         absolute
-        width="224"
+        width="230"
       >
         <SectionSkills
           v-if="staticSection.skills"
